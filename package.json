@@ -1,0 +1,21 @@
+{
+  "name": "microservices-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browser": "npx browser-sync --port 3001 -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joao-pedro-pereira-de-souza/microservices-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joao-pedro-pereira-de-souza/microservices-web/issues"
+  },
+  "homepage": "https://github.com/joao-pedro-pereira-de-souza/microservices-web#readme"
+}

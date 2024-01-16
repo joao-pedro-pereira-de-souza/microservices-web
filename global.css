@@ -1,0 +1,26 @@
+
+* {
+   text-decoration: none;
+   border: 0px;
+   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.title {
+   color: #6C63FF;
+   font-weight: bold;
+}
+
+.btn_action_01 {
+   width: 10rem;
+   height: 2.4rem;
+   background-color: #6C63FF;
+   border-radius: 0.2rem;
+   color: #fff;
+}
+
+.line_separator {
+   width: 100%;
+   border: 1px dashed #6C63FF;
+
+
+}
