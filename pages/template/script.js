@@ -5,7 +5,10 @@ const p_view_path_file = document.getElementById("view_path_file");
 const div_container_params = document.getElementById("container_params");
 const btn_add_params = document.getElementById("btn_add_params");
 const btn_finish = document.getElementById("btn_finish");
-const btn_btn_clear_params = document.getElementById("btn_clear_params");
+const btn_clear_params = document.getElementById("btn_clear_params");
+const btn_dowload = document.getElementById("btn_dowload");
+
+btn_dowload.classList.add("btn_freeza");
 
 import Components from './components.js';
 const components = new Components();
@@ -34,6 +37,22 @@ function Init() {
 
 Init();
 
+function startProgress() {
+  var progressBar = document.getElementById("progressBar");
+  var width = 0;
+
+  var intervalId = setInterval(function () {
+     if (width >= 100) {
+      btn_dowload.classList.remove("btn_freeza");
+      clearInterval(intervalId);
+    } else {
+      width++;
+      progressBar.style.width = width + "%";
+      progressBar.innerHTML = width + "%";
+    }
+  }, 20);
+}
+
 function OnloadPDF(arquivo) {
   const filwReader = new FileReader();
 
@@ -43,7 +62,6 @@ function OnloadPDF(arquivo) {
 
   filwReader.readAsDataURL(arquivo);
 }
-
 
 function EventClickBtnFileUpload() {
   const inputFile = document.createElement("input");
@@ -88,6 +106,7 @@ function AddElementsParams() {
     inputPropertyParam,
   };
 }
+
 function EventClickBtnAddParams() {
 
    const {inputKeyParam, inputPropertyParam } = AddElementsParams();
@@ -103,6 +122,7 @@ function EventClickBtnAddParams() {
 }
 
 function EventClickBtnFinish() {
+   btn_dowload.classList.add("btn_freeza");
    const paramsTempalte = {};
 
    for (const [_, value] of idsInputsParams.entries()) {
@@ -112,6 +132,8 @@ function EventClickBtnFinish() {
       paramsTempalte[element_input_key.value] = element_input_property.value;
 
    }
+
+   startProgress()
    console.log({ paramsTempalte });
 }
 
@@ -121,10 +143,13 @@ function EventClickClearParams() {
    }
 }
 
+
+
+
 btn_file_upload.addEventListener("click", EventClickBtnFileUpload);
 
 btn_add_params.addEventListener("click", EventClickBtnAddParams);
 
 btn_finish.addEventListener("click", EventClickBtnFinish);
 
-btn_btn_clear_params.addEventListener("click", EventClickClearParams);
+btn_clear_params.addEventListener("click", EventClickClearParams);

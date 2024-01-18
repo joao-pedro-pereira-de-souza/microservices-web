@@ -44,3 +44,7 @@
 .btn_action_01:active {
    background-color: #7d78d9;
 }
+
+.btn_freeza {
+   opacity: 0.5;
+}
