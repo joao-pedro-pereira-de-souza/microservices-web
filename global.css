@@ -10,6 +10,18 @@
    font-weight: bold;
 }
 
+.title02 {
+   color: #fff;
+   font-weight: bold;
+   font-size: 1.3rem;
+}
+
+.subtile {
+   color: #fff;
+   font-weight: 700;
+   font-size: 1rem;
+}
+
 .btn_action_01 {
    width: 10rem;
    height: 2.4rem;
@@ -21,6 +33,5 @@
 .line_separator {
    width: 100%;
    border: 1px dashed #6C63FF;
-
 
 }
