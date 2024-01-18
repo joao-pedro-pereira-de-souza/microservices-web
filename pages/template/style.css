@@ -1,6 +1,5 @@
 body {
    background-color: #fff;
-   height: 100vh;
 }
 
 
@@ -9,8 +8,6 @@ main {
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   height: 100vh;
-
 }
 
 #container_file {
@@ -42,11 +39,49 @@ main {
    padding: 0px 1rem;
 }
 
-#container_params_template{
-   overflow: auto;
-   margin-top: 2.5rem;
+#container_params_template {
    width: 60%;
    height: 30rem;
+
+   display: flex;
+   flex-direction: column;
+   margin-top: 2.5rem;
+
    padding: 2rem;
    background-color: rgba(108, 99, 255, 0.3);
 }
+
+#container_params {
+   flex: 1;
+   overflow: auto;
+   border: 1px dashed #6C63FF;
+}
+
+#container_control{
+   margin-top: 10px;
+   width: 100%;
+}
+
+#btn_finish {
+  float: right;
+}
+
+.text_input {
+    height: 50px;
+    text-decoration: none;
+    background-color: #4a41f0;
+    border: 0px;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+ }
+
+ .size_input_key {
+    width: 15rem;
+ }
+
+ .size_input_property {
+    flex: 1;
+    background-color: #4a41f0;
+    margin-left: 10px;
+ }

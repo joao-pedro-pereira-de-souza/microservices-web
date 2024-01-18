@@ -2,6 +2,27 @@
 const view_file = document.getElementById('view_file');
 const btn_file_upload = document.getElementById("btn_file_upload");
 const p_view_path_file = document.getElementById("view_path_file");
+const div_container_params = document.getElementById("container_params");
+const btn_add_params = document.getElementById("btn_add_params");
+const btn_finish = document.getElementById("btn_finish");
+const btn_btn_clear_params = document.getElementById("btn_clear_params");
+
+import Components from './components.js';
+const components = new Components();
+
+
+/**
+ * @typedef {Object} ObjectInputsParam
+ * @property {string} id_input_key - Descrição do id_input_key.
+ * @property {string} id_input_property - Descrição do id_input_property.
+ */
+
+
+/**
+ *
+ * @type { Array.<ObjectInputsParam>}
+ */
+const idsInputsParams = []
 
 function Init() {
    if (!view_file.src) {
@@ -49,4 +70,61 @@ function EventClickBtnFileUpload() {
   inputFile.click();
 }
 
+
+function AddElementsParams() {
+
+  const valueInputs = idsInputsParams.length + 1;
+
+  const inputKeyParam = `<input id="input_key_${valueInputs}" type="text" class="text_input size_input_key">`;
+
+  const inputPropertyParam = `<input id="input_property_${valueInputs}" type="text" class="text_input size_input_property">`;
+
+  idsInputsParams.push({
+      id_input_key: `input_key_${valueInputs}`,
+      id_input_property: `input_property_${valueInputs}`,
+  });
+  return {
+    inputKeyParam,
+    inputPropertyParam,
+  };
+}
+function EventClickBtnAddParams() {
+
+   const {inputKeyParam, inputPropertyParam } = AddElementsParams();
+    const params = {
+      id_input_key: inputKeyParam,
+      id_input_property: inputPropertyParam,
+    };
+   const htmlFormated = ejs.render(components.template_add_params, params);
+
+   const div_content_add_params = document.createElement("div");
+   div_content_add_params.innerHTML = htmlFormated;
+   div_container_params.appendChild(div_content_add_params);
+}
+
+function EventClickBtnFinish() {
+   const paramsTempalte = {};
+
+   for (const [_, value] of idsInputsParams.entries()) {
+      const element_input_key = document.getElementById(value.id_input_key);
+      const element_input_property = document.getElementById(value.id_input_property);
+
+      paramsTempalte[element_input_key.value] = element_input_property.value;
+
+   }
+   console.log({ paramsTempalte });
+}
+
+function EventClickClearParams() {
+   while (div_container_params.firstChild) {
+     div_container_params.removeChild(div_container_params.firstChild);
+   }
+}
+
 btn_file_upload.addEventListener("click", EventClickBtnFileUpload);
+
+btn_add_params.addEventListener("click", EventClickBtnAddParams);
+
+btn_finish.addEventListener("click", EventClickBtnFinish);
+
+btn_btn_clear_params.addEventListener("click", EventClickClearParams);

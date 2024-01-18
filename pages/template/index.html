@@ -5,8 +5,10 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Document</title>
 
-      <link rel="stylesheet" href="./style.css">
-      <link rel="stylesheet" href="../../global.css">
+   <link rel="stylesheet" href="./style.css">
+   <link rel="stylesheet" href="../../global.css">
+
+   <script src="https://cdn.jsdelivr.net/npm/ejs@3.1.9/ejs.min.js"></script>
 
 </head>
 <body>
@@ -30,13 +32,28 @@
 
       <div id="container_params_template">
 
+         <div id="container_params">
+
+         </div>
+
+         <div id="container_control">
+
+               <button id="btn_add_params" class="btn_action_01"> Novo parâmetro </button>
+               <button id="btn_clear_params" class="btn_action_01"> Limpar </button>
+               <button id="btn_finish" class="btn_action_01"> Finalizar </button>
+
+         </div>
+
       </div>
 
-      <div id="progress_template"></div>
+      <div id="progress_template">
+
+
+      </div>
 
   </main>
 
-   <script src="./script.js"></script>
+   <script type="module" src="./script.js"></script>
 
 </body>
 </html>

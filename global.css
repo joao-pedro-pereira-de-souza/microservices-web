@@ -35,3 +35,12 @@
    border: 1px dashed #6C63FF;
 
 }
+
+.btn_action_01:hover {
+   cursor: pointer;
+   background-color: #463ee4;
+}
+
+.btn_action_01:active {
+   background-color: #7d78d9;
+}
