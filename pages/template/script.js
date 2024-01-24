@@ -1,5 +1,14 @@
 
+import ApiService from '../../services/api/index.js';
+import IsResponseAlert from '../../responses/index.js';
+
+/**
+ * @type {File} [file]
+ */
+let file_upload = null;
+
 const view_file = document.getElementById('view_file');
+const view_file_output = document.getElementById("view_file_output");
 const btn_file_upload = document.getElementById("btn_file_upload");
 const p_view_path_file = document.getElementById("view_path_file");
 const div_container_params = document.getElementById("container_params");
@@ -12,6 +21,9 @@ btn_dowload.classList.add("btn_freeza");
 
 import Components from './components.js';
 const components = new Components();
+
+import WebSocket from '../../services/websockets/index.js';
+const webSocket = new WebSocket();
 
 
 /**
@@ -33,6 +45,13 @@ function Init() {
    } else {
       view_file.style.border = "none";
    }
+
+
+    if (!view_file_output.src) {
+      view_file_output.style.border = "1px solid #000";
+    } else {
+      view_file_output.style.border = "none";
+    }
 }
 
 Init();
@@ -53,14 +72,29 @@ function startProgress() {
   }, 20);
 }
 
-function OnloadPDF(arquivo) {
+/**
+ *
+ * @param {any} file
+ * @param {HTMLElement} elementEmbed
+ * @param {boolean} isPathLocal
+ */
+
+function OnloadPDF(file, elementEmbed, isPathLocal) {
   const filwReader = new FileReader();
 
   filwReader.onload = function (event) {
-     view_file.src = event.target.result;
+
+    if (isPathLocal) {
+      elementEmbed.src = event.target.result;
+    } else {
+      const objectUrl = URL.createObjectURL(file);
+      elementEmbed.src = objectUrl;
+    }
+
   };
 
-  filwReader.readAsDataURL(arquivo);
+  filwReader.readAsDataURL(file);
+  elementEmbed.style.border = "none";
 }
 
 function EventClickBtnFileUpload() {
@@ -71,12 +105,9 @@ function EventClickBtnFileUpload() {
   inputFile.addEventListener("change", function () {
     if (inputFile.files.length > 0) {
       const file = inputFile.files[0];
-       if (file.type === "application/pdf") {
-
-          console.log(file)
-          OnloadPDF(file);
-
-          view_file.style.border = "none";
+      if (file.type === "application/pdf") {
+        file_upload = file;
+          OnloadPDF(file, view_file, true);
           p_view_path_file.innerText = file.name;
 
        } else {
@@ -86,6 +117,19 @@ function EventClickBtnFileUpload() {
   });
 
   inputFile.click();
+}
+
+
+/**
+ * @param {Object} params
+ * @param {File} params.pdf
+ */
+function ResponseJobUseTemplate(params) {
+  const file =  params.file;
+
+  const blob = new Blob([file], { type: "application/pdf" });
+  OnloadPDF(blob, view_file_output, false);
+
 }
 
 
@@ -121,20 +165,53 @@ function EventClickBtnAddParams() {
    div_container_params.appendChild(div_content_add_params);
 }
 
-function EventClickBtnFinish() {
-   btn_dowload.classList.add("btn_freeza");
-   const paramsTempalte = {};
+async function EventClickBtnFinish() {
 
-   for (const [_, value] of idsInputsParams.entries()) {
+  if (!file_upload) {
+    alert('É obrigatório enviar o arquivo.')
+  }
+
+  if (file_upload) {
+    btn_dowload.classList.add("btn_freeza");
+    const paramsTempalte = {};
+
+    for (const [_, value] of idsInputsParams.entries()) {
       const element_input_key = document.getElementById(value.id_input_key);
-      const element_input_property = document.getElementById(value.id_input_property);
+      const element_input_property = document.getElementById(
+        value.id_input_property
+      );
 
       paramsTempalte[element_input_key.value] = element_input_property.value;
+    }
 
-   }
+    const paramsRequestReport = {
+      file: file_upload,
+      data: {
+        data: paramsTempalte,
+      },
+    };
 
-   startProgress()
-   console.log({ paramsTempalte });
+    const response = await ApiService.report.create(paramsRequestReport);
+
+    IsResponseAlert(response);
+
+    const job_id = response.data.job_id;
+
+    await webSocket.open();
+
+    const paramsEmitJoin = {
+      job_id,
+    };
+    webSocket.emitJoinRoomProgress(paramsEmitJoin);
+
+    const paramsOnProgress = {
+      callback: ResponseJobUseTemplate,
+    };
+    webSocket.onProgressTemplate(paramsOnProgress);
+
+    startProgress();
+  }
+
 }
 
 function EventClickClearParams() {
@@ -144,12 +221,7 @@ function EventClickClearParams() {
 }
 
 
-
-
 btn_file_upload.addEventListener("click", EventClickBtnFileUpload);
-
 btn_add_params.addEventListener("click", EventClickBtnAddParams);
-
 btn_finish.addEventListener("click", EventClickBtnFinish);
-
 btn_clear_params.addEventListener("click", EventClickClearParams);

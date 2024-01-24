@@ -23,6 +23,12 @@ main {
 
 }
 
+#view_file_output {
+   margin-top: 10px;
+   width: 100%;
+   height: 24rem;
+}
+
 #upload_pdf {
    display: flex;
    flex-direction: row;
@@ -88,7 +94,7 @@ main {
 
  #progress_template {
    width: 60%;
-   height: 15rem;
+   height: 30rem;
 
    display: flex;
    flex-direction: column;
